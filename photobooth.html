@@ -282,7 +282,7 @@
     </style>
 </head>
 <body>
-    <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+    <button class="back-btn" onclick="window.location.href='home.html'">←</button>
     
     <div class="booth-container">
         <div class="main-preview">
@@ -341,6 +341,16 @@
             this.textContent = `${delaySeconds}s Delay`;
         }
 
+        function loadSavedPhotos() {
+            const savedPhotos = sessionStorage.getItem('currentStrip');
+            if (savedPhotos) {
+                currentStrip = JSON.parse(savedPhotos);
+                if (currentStrip.length > 0) {
+                    const previewBtn = document.getElementById('previewBtn');
+                    previewBtn.style.display = 'block';
+                }
+            }
+        }
         async function startAutoCapture() {
             if (isAutoCapturing) return;
             isAutoCapturing = true;
@@ -383,6 +393,7 @@
         function showStripPreview() {
             const stripPreview = document.getElementById('stripPreview');
             const stripGrid = document.getElementById('stripGrid');
+            const previewBtn = document.getElementById('previewBtn');
             
             stripGrid.className = `strip-grid grid-${photoCount}`;
             stripGrid.innerHTML = currentStrip.map(photo => `
@@ -390,6 +401,7 @@
             `).join('');
             
             stripPreview.style.display = 'block';
+            previewBtn.style.display = 'block'; // Make sure preview button is visible
         }
 
         function closePreview() {
