@@ -548,9 +548,59 @@
             
             const timerDisplay = document.getElementById('timer');
             const previewBtn = document.getElementById('previewBtn');
+            const controlBtns = document.querySelectorAll('.control-btn');
+            
+            // Disable buttons during capture
+            controlBtns.forEach(btn => btn.disabled = true);
             previewBtn.style.display = 'none';
             
-            for (let i = 0; i < photoCount; i++) {
+            try {
+                for (let i = 0; i < photoCount; i++) {
+                    // Display countdown
+                    for (let j = delaySeconds; j > 0; j--) {
+                        timerDisplay.style.display = 'block';
+                        timerDisplay.textContent = j;
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                    timerDisplay.style.display = 'none';
+                    
+                    // Take photo with error handling
+                    const photoData = capturePhoto();
+                    if (photoData) {
+                        currentStrip.push(photoData);
+                        // Save after each capture
+                        sessionStorage.setItem('currentStrip', JSON.stringify(currentStrip));
+                    }
+                    
+                    if (i < photoCount - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                }
+            } catch (error) {
+                console.error('Capture error:', error);
+                alert('Error during capture. Please try again.');
+            } finally {
+                isAutoCapturing = false;
+                controlBtns.forEach(btn => btn.disabled = false);
+                if (currentStrip.length > 0) {
+                    previewBtn.style.display = 'block';
+                }
+            }
+        }
+
+        async function startSingleCapture() {
+            if (isAutoCapturing) return;
+            isAutoCapturing = true;
+            
+            const timerDisplay = document.getElementById('timer');
+            const previewBtn = document.getElementById('previewBtn');
+            const controlBtns = document.querySelectorAll('.control-btn');
+            
+            // Disable buttons during capture
+            controlBtns.forEach(btn => btn.disabled = true);
+            previewBtn.style.display = 'none';
+            
+            try {
                 // Display countdown
                 for (let j = delaySeconds; j > 0; j--) {
                     timerDisplay.style.display = 'block';
@@ -559,48 +609,35 @@
                 }
                 timerDisplay.style.display = 'none';
                 
-                // Take photo
+                // Take photo with error handling
                 const photoData = capturePhoto();
-                currentStrip.push(photoData);
-                
-                if (i < photoCount - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 500));
+                if (photoData) {
+                    currentStrip.push(photoData);
+                    // Save immediately after capture
+                    sessionStorage.setItem('currentStrip', JSON.stringify(currentStrip));
+                }
+            } catch (error) {
+                console.error('Capture error:', error);
+                alert('Error during capture. Please try again.');
+            } finally {
+                isAutoCapturing = false;
+                controlBtns.forEach(btn => btn.disabled = false);
+                if (currentStrip.length > 0) {
+                    previewBtn.style.display = 'block';
                 }
             }
-
-            isAutoCapturing = false;
-            previewBtn.style.display = 'block';
-        }
-
-      
-
-        async function startSingleCapture() {
-            if (isAutoCapturing) return;
-            isAutoCapturing = true;
-            
-            const timerDisplay = document.getElementById('timer');
-            const previewBtn = document.getElementById('previewBtn');
-            previewBtn.style.display = 'none';
-            
-            // Display countdown
-            for (let j = delaySeconds; j > 0; j--) {
-                timerDisplay.style.display = 'block';
-                timerDisplay.textContent = j;
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-            timerDisplay.style.display = 'none';
-            
-            // Take photo
-            const photoData = capturePhoto();
-            currentStrip.push(photoData);
-            
-            isAutoCapturing = false;
-            previewBtn.style.display = 'block';
         }
 
         function goToPreview() {
-            sessionStorage.setItem('currentStrip', JSON.stringify(currentStrip));
-            window.location.href = 'preview.html';
+            if (currentStrip.length > 0) {
+                try {
+                    sessionStorage.setItem('currentStrip', JSON.stringify(currentStrip));
+                    window.location.href = 'preview.html';
+                } catch (error) {
+                    console.error('Storage error:', error);
+                    alert('Error saving photos. Please try again.');
+                }
+            }
         }
 
         // Update window.addEventListener
