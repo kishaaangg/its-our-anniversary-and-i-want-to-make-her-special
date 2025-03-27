@@ -438,9 +438,10 @@
             const context = canvas.getContext('2d');
             const size = Math.min(video.videoWidth, video.videoHeight);
             
-            // Set canvas to high resolution square
-            canvas.width = 1920;
-            canvas.height = 1920;
+            // Optimize canvas size for mobile
+            const maxDimension = 1280; // Reduced from 1920 for better mobile compatibility
+            canvas.width = maxDimension;
+            canvas.height = maxDimension;
             
             // Calculate cropping to ensure square aspect ratio
             const xOffset = (video.videoWidth - size) / 2;
@@ -450,97 +451,51 @@
             context.scale(-1, 1);
             context.translate(-canvas.width, 0);
             
-            // Enable high-quality scaling
-            context.imageSmoothingEnabled = true;
-            context.imageSmoothingQuality = 'high';
-            
-            // Draw the video frame, cropped to square and scaled up
+            // Draw the video frame with optimized quality
             context.drawImage(video, 
-                xOffset, yOffset, size, size,  // Source (crop)
-                0, 0, canvas.width, canvas.height  // Destination (scale up)
+                xOffset, yOffset, size, size,
+                0, 0, canvas.width, canvas.height
             );
             
             // Reset transformation
             context.setTransform(1, 0, 0, 1, 0, 0);
             
-            // Return highest quality JPEG
-            return canvas.toDataURL('image/jpeg', 1.0);
-        }
-
-        function showStripPreview() {
-            const stripPreview = document.getElementById('stripPreview');
-            const stripGrid = document.getElementById('stripGrid');
-            const previewBtn = document.getElementById('previewBtn');
-            
-            stripGrid.className = `strip-grid grid-${photoCount}`;
-            stripGrid.innerHTML = currentStrip.map(photo => `
-                <img src="${photo}" style="width: 100%; height: auto; border-radius: 10px;">
-            `).join('');
-            
-            stripPreview.style.display = 'block';
-            previewBtn.style.display = 'block'; // Make sure preview button is visible
-        }
-
-        function closePreview() {
-            document.getElementById('stripPreview').style.display = 'none';
-        }
-
-        function saveStrip() {
-            const stripGrid = document.getElementById('stripGrid');
-            html2canvas(stripGrid).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `photo-strip-${new Date().getTime()}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-        // Add html2canvas library for saving the strip
-        const script = document.createElement('script');
-        script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
-        document.head.appendChild(script);
-  
-
-        async function initCamera() {
             try {
-                video = document.getElementById('video');
-                canvas = document.getElementById('canvas');
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: {
-                        facingMode: 'user',
-                        width: { ideal: 1920 },
-                        height: { ideal: 1080 },
-                        frameRate: { ideal: 60 }
-                    }
-                });
-                video.srcObject = stream;
-            } catch (err) {
-                console.error('Error accessing camera:', err);
-                alert('Unable to access camera. Please ensure camera permissions are granted.');
+                // Compress image for mobile storage
+                return canvas.toDataURL('image/jpeg', 0.8);
+            } catch (error) {
+                console.error('Error saving photo:', error);
+                return null;
             }
         }
 
-        /* Update the capturePhoto function */
-        function capturePhoto() {
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            
-            // Mirror the canvas to match the preview
-            context.scale(-1, 1);
-            context.translate(-canvas.width, 0);
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // Reset transformation
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            
-            // Save with high quality
-            return canvas.toDataURL('image/jpeg', 1.0);
+        function saveToStorage(photos) {
+            try {
+                const compressedPhotos = photos.map(photo => {
+                    if (!photo) return null;
+                    // Further compress if needed
+                    if (photo.length > 500000) { // If larger than ~500KB
+                        const img = new Image();
+                        img.src = photo;
+                        const tempCanvas = document.createElement('canvas');
+                        const ctx = tempCanvas.getContext('2d');
+                        tempCanvas.width = 800; // Smaller dimension
+                        tempCanvas.height = 800;
+                        ctx.drawImage(img, 0, 0, 800, 800);
+                        return tempCanvas.toDataURL('image/jpeg', 0.7);
+                    }
+                    return photo;
+                }).filter(photo => photo !== null);
+
+                sessionStorage.setItem('currentStrip', JSON.stringify(compressedPhotos));
+                return true;
+            } catch (error) {
+                console.error('Storage error:', error);
+                return false;
+            }
         }
 
-      
-       
-        /* Update script section */
+        // Update the photo saving in startAutoCapture and startSingleCapture
         async function startAutoCapture() {
             if (isAutoCapturing) return;
             isAutoCapturing = true;
@@ -550,13 +505,11 @@
             const previewBtn = document.getElementById('previewBtn');
             const controlBtns = document.querySelectorAll('.control-btn');
             
-            // Disable buttons during capture
             controlBtns.forEach(btn => btn.disabled = true);
             previewBtn.style.display = 'none';
             
             try {
                 for (let i = 0; i < photoCount; i++) {
-                    // Display countdown
                     for (let j = delaySeconds; j > 0; j--) {
                         timerDisplay.style.display = 'block';
                         timerDisplay.textContent = j;
@@ -564,12 +517,13 @@
                     }
                     timerDisplay.style.display = 'none';
                     
-                    // Take photo with error handling
                     const photoData = capturePhoto();
                     if (photoData) {
                         currentStrip.push(photoData);
-                        // Save after each capture
-                        sessionStorage.setItem('currentStrip', JSON.stringify(currentStrip));
+                        // Save with compression
+                        if (!saveToStorage(currentStrip)) {
+                            throw new Error('Storage failed');
+                        }
                     }
                     
                     if (i < photoCount - 1) {
@@ -578,7 +532,7 @@
                 }
             } catch (error) {
                 console.error('Capture error:', error);
-                alert('Error during capture. Please try again.');
+                alert('Storage space is full. Try clearing some photos or using fewer shots.');
             } finally {
                 isAutoCapturing = false;
                 controlBtns.forEach(btn => btn.disabled = false);
