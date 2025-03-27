@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Timeline</title>
+    <style>
+        :root {
+            --neon-pink: #ff6b9d;
+            --glow-color: rgba(255, 107, 157, 0.7);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: url('images/bg4.jpg') center/cover fixed;
+            font-family: 'Segment7Standard', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        .digital-clock {
+            background: rgba(234, 200, 200, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 0 30px var(--glow-color),
+                        inset 0 0 20px rgba(255, 107, 157, 0.3);
+            border: 2px solid var(--neon-pink);
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        .time-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Add these new keyframes */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Update the time-unit style */
+        .time-unit {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--neon-pink);
+            box-shadow: 0 0 15px var(--glow-color);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Add staggered animation delays for each unit */
+        .time-display .time-unit:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .time-display .time-unit:nth-child(2) {
+            animation-delay: 0.75s;
+        }
+        
+        .time-display .time-unit:nth-child(3) {
+            animation-delay: 1.5s;
+        }
+        
+        .time-display .time-unit:nth-child(4) {
+            animation-delay: 2.25s;
+        }
+
+        .number {
+            font-size: 3rem;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--glow-color);
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .label {
+            font-size: 1rem;
+            color: rgba(235, 126, 126, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 2rem;
+            color: whitesmoke;
+            text-shadow: 0 0 15px var(--glow-color);
+            margin-bottom: 1rem;
+        }
+
+        .start-date {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        .back-btn:hover {
+            background: var(--neon-pink);
+            color: rgb(255, 255, 255);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px var(--glow-color); }
+            50% { box-shadow: 0 0 50px var(--glow-color); }
+        }
+
+        @media (max-width: 720px) {
+            .digital-clock {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .time-display {
+                gap: 1rem;
+            }
+
+            .time-unit {
+                padding: 1rem;
+            }
+
+            .number {
+                font-size: 2rem;
+            }
+
+            .label {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+    
+    <div class="digital-clock">
+        <div class="title">Time Together</div>
+        <div class="time-display">
+            <div class="time-unit">
+                <div class="number" id="days">00</div>
+                <div class="label">Days</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="hours">00</div>
+                <div class="label">Hours</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="minutes">00</div>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="seconds">00</div>
+                <div class="label">Seconds</div>
+            </div>
+        </div>
+        <div class="start-date">Since March 26, 2024, 7:16 PM</div>
+    </div>
+
+    <script>
+        function updateTimer() {
+            const startDate = new Date('March 26, 2024 19:16:00').getTime();
+            
+            function update() {
+                const now = new Date().getTime();
+                const difference = now - startDate;
+
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            }
+
+            update();
+            setInterval(update, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', updateTimer);
+    </script>
+</body>
+</html>

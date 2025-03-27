@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Photos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #FF6B6B;
+            --light-pink: #FFE5E5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--light-pink);
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+        }
+
+        .preview-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
+        }
+
+        .photo-strip {
+            background: var(--light-pink);
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .photo-strip img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: var(--primary-pink);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            background: #ff5252;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-pink);
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-pink);
+            color: white;
+        }
+
+        @media (max-width: 720px) {
+            .preview-container {
+                margin: 70px auto 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">←</button>
+    
+    <div class="preview-container">
+        <div class="photo-strip" id="photoStrip"></div>
+        <div class="actions">
+            <button class="action-btn" onclick="savePhotos()">💾 Save Photos</button>
+        </div>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        function loadPhotos() {
+            const photos = JSON.parse(sessionStorage.getItem('currentStrip') || '[]');
+            const strip = document.getElementById('photoStrip');
+            strip.innerHTML = photos.map(photo => `
+                <img src="${photo}" alt="Your photo">
+            `).join('');
+        }
+
+        function savePhotos() {
+            const strip = document.getElementById('photoStrip');
+            html2canvas(strip).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `photo-strip-${new Date().getTime()}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function goBack() {
+            sessionStorage.removeItem('currentStrip');
+            window.location.href = 'photobooth.html';
+        }
+
+        window.addEventListener('load', loadPhotos);
+    </script>
+</body>
+</html>
