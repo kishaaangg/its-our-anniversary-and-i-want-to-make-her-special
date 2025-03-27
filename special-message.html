@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our 1st Anniversary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #FF6B6B;
+            --light-pink: #FFE5E5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFE5E5 0%, #FFB6C1 100%);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+
+        .message-container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .message-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            color: var(--primary-pink);
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 1s ease-out;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #444;
+            margin-bottom: 40px;
+            text-align: justify;
+        }
+
+        .message p {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--primary-pink);
+            text-align: right;
+            margin-top: 50px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2s forwards;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-pink);
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: floatHeart 4s linear infinite;
+            color: var(--primary-pink);
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+
+    <div class="message-container">
+        <div class="floating-hearts"></div>
+        <div class="message-content">
+            <h1 class="title">Happy 1st Anniversary, My Love! ❤️</h1>
+            
+            <div class="message">
+                <p>Remember, baby? Yung unang interaction natin? It was August 1, 2022. 3 years ago? Ewan basta tanda ko were trying to add me sag c niyo. I was surprised kasi di ko inexpect na may random na mag-iinvite saken out of nowhere. Turns out, random lang pala talaga yung pag-add mo, pero ewan ko ba, parang I felt special na non. Di muna nga ako nag response non wahhahabaha I was trying to act cool non (⁠╥⁠﹏⁠╥⁠)(⁠╥⁠﹏⁠╥⁠) I even called u lods hahahahha, naguguluhan pako ako kung paano ko tatanggapin yung invite mo, pero syempre, gusto ko, so I said yes naman.</p>
+                
+                <p>Tas ayun, pumasok ako sa gc niyo and honestly, masaya naman. Ikaw yung pinaka-active don, ikaw lagi napapansin ko and ikaw rin yung unang nag-entertain saken. Well, syempre responsibilidad mo yun kasi ikaw nag-add saken duh. Pero kidding aside, sobrang happy ako na nangyari yung araw na yun. Yung simpleng pag-add mo saken turned out to be one of the best things that ever happened to me. Sino ba mag-aakala na sa random na gc invite, magiging tayo pala. Destined talaga tayo.</p>
+                
+                <p>Tas yun naging friends tayo, tanda ko u always got tampo sa gc eh, ikaw lagi active and mostly doon is may particular time lang na active sa gc. Syempre ako to the rescue ask ka agad why tahimik, kase syempre di naman sanay sa presense mo. Alam mo since then I always care for you. Kahit din nung kayo pa ni JC, (tangina pala non buti na lang talaga wala na kayo. Tangina mo JC this girl is mine now, I would love her better than you ever did) I was always there for you pero as a friend lang non ha. Kasama ko pa si Rei sa pagiging concerned sayo. Wala pa akong romantic feelings non.</p>
+                
+                <p>Tapos naalala ko after niyo ni JC, lagi kitang inaalala. Tanda ko pa may isang time na sinabi ko na hindi ka okay tas ikaw nag-deny ka tapos nag-offer ako ng hug pero question mark lang yung reply mo. Ano yon baby hahahaha sakit mo grabe ka saken non. Pero despite that, I never stopped checking up on you. I never stopped making sure na okay ka kahit alam kong madalas mong sabihin na okay ka kahit hindi naman.</p>
+                
+                <p>Then school came kaya umalis na ako sa dump. Pero ikaw lang nakamiss saken. Ikaw lang talaga hahahaha kaya nung sinabi mo ra mo saken, syempre nag-add din ako nung ra ko para naman di mo ako makalimutan hehehehe.</p>
+                
+                <p>Tapos dumating na yung phase na nasa ra na tayo. We were having a really good time. Honestly, feel ko non parang nasa situationship na tayo. I had feelings for you na talaga. Masaya yung moments natin non, ang dami nating tawa, kulitan, late-night talks, pero dumating yung time na nag-stop yung good time na yon. I started getting selos. Hindi ko alam kung justified ba pero nararamdaman ko lang talaga. Tas wala akong nakukuhang reassurance. Pero it was okay for me, I wasn't expecting it, pero ang sakit lang kasi ako, I would reassure you kahit wala pa tayo, kahit hindi pa clear lahat. Pero ako, I never felt reciprocated non.</p>
+                
+                <p>Tas dumating si Raymond. Dun talaga ako nawasak. I have never been heartbroken like that in my entire life. Ang sakit, sobrang sakit. Pero kahit ganon, masasabi ko pa rin na it was good in a way. Kasi pagkatapos ng sakit na yon, you came back. I was hesitant pa, hindi ko alam kung kaya ko pang bumalik sayo, pero gusto talaga kita. Sobrang gusto kita. Kahit masakit pa, I entertained you ulet. I accepted you ulet. Feel ko nga ang tanga ko sa part na yon, pero bahala na si batman sabi ko non. And you know what? That was the best decision I ever made.</p>
+                
+                <p>Kasi baby, after all of that, you proved to me na worth it ka. Lahat ng pagkukulang mo non, napuno mo, and sobra sobra pa. You improved yourself, you fixed yourself para saken. Yung mga hinihiling ko before na reciprocation, ngayon nararamdaman ko na lahat. You show me love in ways na hindi ko inakala na mararanasan ko. I never felt this happy. I never felt this secure. And for that, I am so grateful.</p>
+                
+                <p>Look at us now. One whole year together. Ang dami nating pinagdaanan, away, tampuhans, misunderstandings pero were still here. You always tell me na natatakot kang magkulang pero love never kang nagkulang po. And sa lahat ng overthinking mo, I want you to know that you are more than enough for me.</p>
+                
+                <p>One year na tayo love and I promise you this won't be the last. I love you so much and I will never stop choosing you. 1 year down baby, forever to go.</p>
+                
+                <p>Happy 1st anniversary my baby ❤️</p>
+            </div>
+
+            <div class="signature">Forever Yours ❤️</div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.querySelector('.floating-hearts').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // Create hearts periodically
+        setInterval(createHeart, 300);
+
+        // Animate paragraphs sequentially
+        document.addEventListener('DOMContentLoaded', function() {
+            const paragraphs = document.querySelectorAll('.message p');
+            paragraphs.forEach((p, index) => {
+                p.style.animationDelay = `${index * 0.5}s`;
+            });
+        });
+    </script>
+</body>
+</html>
