@@ -14,6 +14,51 @@
             --hover-pink: #FFD1D1;
         }
 
+        /* Add modal styles */
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            border: none;
+        }
+
+        .modal-title {
+            color: var(--primary-pink);
+            font-weight: bold;
+
+            font-size: 1.8rem;
+         align-items: center;
+            justify-content: center;
+         
+            padding: 1rem;;
+            
+        }
+
+        .form-control {
+            border: 2px solid var(--light-pink);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 107, 0.25);
+        }
+
+        .btn-primary {
+            background: var(--primary-pink);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+
             body {
                 background: url('images/bg4.jpg') center/cover fixed;
                 font-family: 'Poppins', sans-serif;
@@ -136,7 +181,7 @@
                     <i class="icon">⏰</i>
                     <span>Our Timeline</span>
                 </div>
-                <div class="menu-item" onclick="window.location.href='gallery.html'"  style="animation-delay: 0.2s">
+                <div class="menu-item" onclick="window.location.href='gallery.html'" style="animation-delay: 0.2s">
                     <i class="icon">📸</i>
                     <span>Photo Gallery</span>
                 </div>
@@ -144,7 +189,7 @@
                     <i class="icon">📷</i>
                     <span>Photo Booth</span>
                 </div>
-                <div class="menu-item" onclick="window.location.href='special-message.html'" style="animation-delay: 0.4s">
+                <div class="menu-item" onclick="handleSpecialMessage()" style="animation-delay: 0.4s">
                     <i class="icon">💝</i>
                     <span>Special Message</span>
                 </div>
@@ -158,9 +203,57 @@
                 </div>
             </div>
         </div>
-    </style>
-</head>
-=
+   <!-- Modal -->
+   <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Are u my Keeshia? ^_~</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <div class="mb-4">
+                    <label class="form-label">Ano muna name ng cat ko?</label>
+                    <input type="text" class="form-control" id="petInput" placeholder="Enter my cat's name">
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-primary px-5" onclick="verifyPet()">Check Answer 🐱</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+
+<!-- Add this script right after your existing scripts -->
+<script>
+    // Reset session when page loads
+    window.onload = function() {
+        sessionStorage.removeItem('messageUnlocked');
+    }
+
+    function verifyPet() {
+        const petName = document.getElementById('petInput').value.toLowerCase();
+        const correctPetName = "pongkan"; // Your cat's name
+
+        if (petName === correctPetName) {
+            sessionStorage.setItem('messageUnlocked', 'true');
+            window.location.href = 'special-message.html';
+        } else {
+            alert('Hindi yan name ng cat ko! Try again 🐱');
+            document.getElementById('petInput').value = '';
+        }
+    }
+
+    function handleSpecialMessage() {
+        if (sessionStorage.getItem('messageUnlocked') === 'true') {
+            window.location.href = 'special-message.html';
+        } else {
+            new bootstrap.Modal(document.getElementById('authModal')).show();
+        }
+    }
+</script>
     
 
     
